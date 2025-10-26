@@ -85,7 +85,7 @@ const COURSES = [
     id: "sei",
     name: "Sustainability and Ethical Innovation",
     code: "23CE200HS310",
-    credits: 3,
+    credits: 2,
     maxTotal: 100,
     components: [
       { key: "mid", label: "Mid Term Examination", max: 30 },
