@@ -5,114 +5,196 @@ import CourseCard from "./components/CourseCard";
 import ResultPanel from "./components/ResultPanel";
 import FooterActions from "./components/FooterActions";
 
-const COURSES = [
-  {
-    id: "cloud",
-    name: "Cloud Computing",
-    code: "23CS101ES301",
-    credits: 2,
-    maxTotal: 100,
-    components: [
-      { key: "mid", label: "Mid", max: 20 },
-      { key: "cert", label: "Certifications", max: 5 },
-      { key: "labExam", label: "Lab Exam", max: 10 },
-      { key: "labTest", label: "Lab Test", max: 10 },
-      { key: "classTest", label: "Class Test", max: 5 },
-      { key: "project", label: "Project", max: 10 },
-      { key: "remid", label: "Re Mid (optional)", max: 20, type: "remid", replaces: "mid" },
-      { key: "end", label: "End Term", max: 40 },
-    ],
-  },
-  {
-    id: "swe",
-    name: "Software Eng. & System Design",
-    code: "23CS201PC302",
-    credits: 3,
-    maxTotal: 100,
-    components: [
-      { key: "mid", label: "Mid", max: 20 },
-      { key: "classTest", label: "Class Test", max: 10 },
-      { key: "labExam", label: "Lab Exam", max: 20 },
-      { key: "project", label: "Project", max: 5 },
-      { key: "cert", label: "Certifications", max: 5 },
-      { key: "remid", label: "Re Mid (optional)", max: 20, type: "remid", replaces: "mid" },
-      { key: "end", label: "End Term", max: 40 },
-    ],
-  },
-  {
-    id: "qla",
-    name: "Quantitative Aptitude & Logical Reasoning",
-    code: "23HS102CR202",
-    credits: 3,
-    maxTotal: 100,
-    components: [
-      { key: "ut1", label: "UT1", max: 20 },
-      { key: "ut2", label: "UT2", max: 20 },
-      { key: "ut3", label: "UT3", max: 20 },
-      { key: "remid", label: "Re Mid (optional)", max: 20, type: "remid", replaces: "ut3" },
-      { key: "end", label: "End Term", max: 40 },
-    ],
-  },
-  {
-    id: "fin",
-    name: "Financial Accounting & Management",
-    code: "23SB300OE307",
-    credits: 3,
-    maxTotal: 100,
-    components: [
-      { key: "mid", label: "Mid", max: 20 },
-      { key: "classTest", label: "Class Test", max: 10 },
-      { key: "assignment", label: "Assignment", max: 15 },
-      { key: "cert", label: "Certifications", max: 10 },
-      { key: "quiz", label: "Quiz", max: 5 },
-      { key: "remid", label: "Re Mid (optional)", max: 20, type: "remid", replaces: "mid" },
-      { key: "end", label: "End Term", max: 40 },
-    ],
-  },
-  {
-    id: "toc",
-    name: "Theory of Computation (TOC)",
-    code: "-",
-    credits: 3,
-    maxTotal: 100,
-    components: [
-      { key: "mid", label: "Mid", max: 30 },
-      { key: "classTest", label: "Class Test", max: 30 },
-      { key: "end", label: "End Term", max: 40 },
-    ],
-  },
-  {
-    id: "sei",
-    name: "Sustainability and Ethical Innovation",
-    code: "23CE200HS310",
-    credits: 2,
-    maxTotal: 100,
-    components: [
-      { key: "mid", label: "Mid Term Examination", max: 30 },
-      { key: "classTest", label: "Class Test", max: 20 },
-      { key: "remid", label: "Re Mid (optional)", max: 30, type: "remid", replaces: "mid" },
-      { key: "end", label: "End Term Examination", max: 50 },
-    ],
-  },
-  {
-    id: "aiuav",
-    name: "AI Technologies in Unmanned Aerial Vehicles",
-    code: "23CA201SE404",
-    credits: 3,
-    maxTotal: 100,
-    components: [
-      { key: "mid", label: "Mid Term Examination", max: 15 },
-      { key: "classTest", label: "Class Test", max: 10 },
-      { key: "cert", label: "Certifications/Workshops/Webinars", max: 7 },
-      { key: "cae", label: "Continuous Activity Evaluation", max: 5 },
-      { key: "labExam", label: "Lab Exam", max: 10 },
-      { key: "hackathon", label: "Hackathon", max: 8 },
-      { key: "project", label: "Project", max: 15 },
-      { key: "remid", label: "Re Mid (optional)", max: 15, type: "remid", replaces: "mid" },
-      { key: "end", label: "End Term Examination", max: 30 },
-    ],
-  },
-];
+// Course sets for different years
+const COURSES_BY_YEAR = {
+  third: [
+    {
+      id: "cloud",
+      name: "Cloud Computing",
+      code: "23CS101ES301",
+      credits: 2,
+      maxTotal: 100,
+      components: [
+        { key: "mid", label: "Mid", max: 20 },
+        { key: "cert", label: "Certifications", max: 5 },
+        { key: "labExam", label: "Lab Exam", max: 10 },
+        { key: "labTest", label: "Lab Test", max: 10 },
+        { key: "classTest", label: "Class Test", max: 5 },
+        { key: "project", label: "Project", max: 10 },
+        { key: "remid", label: "Re Mid (optional)", max: 20, type: "remid", replaces: "mid" },
+        { key: "end", label: "End Term", max: 40 },
+      ],
+    },
+    {
+      id: "swe",
+      name: "Software Eng. & System Design",
+      code: "23CS201PC302",
+      credits: 3,
+      maxTotal: 100,
+      components: [
+        { key: "mid", label: "Mid", max: 20 },
+        { key: "classTest", label: "Class Test", max: 10 },
+        { key: "labExam", label: "Lab Exam", max: 20 },
+        { key: "project", label: "Project", max: 5 },
+        { key: "cert", label: "Certifications", max: 5 },
+        { key: "remid", label: "Re Mid (optional)", max: 20, type: "remid", replaces: "mid" },
+        { key: "end", label: "End Term", max: 40 },
+      ],
+    },
+    {
+      id: "qla",
+      name: "Quantitative Aptitude & Logical Reasoning",
+      code: "23HS102CR202",
+      credits: 3,
+      maxTotal: 100,
+      components: [
+        { key: "ut1", label: "UT1", max: 20 },
+        { key: "ut2", label: "UT2", max: 20 },
+        { key: "ut3", label: "UT3", max: 20 },
+        { key: "remid", label: "Re Mid (optional)", max: 20, type: "remid", replaces: "ut3" },
+        { key: "end", label: "End Term", max: 40 },
+      ],
+    },
+    {
+      id: "fin",
+      name: "Financial Accounting & Management",
+      code: "23SB300OE307",
+      credits: 3,
+      maxTotal: 100,
+      components: [
+        { key: "mid", label: "Mid", max: 20 },
+        { key: "classTest", label: "Class Test", max: 10 },
+        { key: "assignment", label: "Assignment", max: 15 },
+        { key: "cert", label: "Certifications", max: 10 },
+        { key: "quiz", label: "Quiz", max: 5 },
+        { key: "remid", label: "Re Mid (optional)", max: 20, type: "remid", replaces: "mid" },
+        { key: "end", label: "End Term", max: 40 },
+      ],
+    },
+    {
+      id: "toc",
+      name: "Theory of Computation",
+      code: "23CS300PC301",
+      credits: 3,
+      maxTotal: 100,
+      components: [
+        { key: "mid", label: "Mid", max: 30 },
+        { key: "classTest", label: "Class Test", max: 30 },
+        { key: "end", label: "End Term", max: 40 },
+      ],
+    },
+    {
+      id: "sei",
+      name: "Sustainability and Ethical Innovation",
+      code: "23CE200HS310",
+      credits: 2,
+      maxTotal: 100,
+      components: [
+        { key: "mid", label: "Mid Term Examination", max: 30 },
+        { key: "classTest", label: "Class Test", max: 20 },
+        { key: "remid", label: "Re Mid (optional)", max: 30, type: "remid", replaces: "mid" },
+        { key: "end", label: "End Term Examination", max: 50 },
+      ],
+    },
+    {
+      id: "aiuav",
+      name: "AI Technologies in Unmanned Aerial Vehicles",
+      code: "23CA201SE404",
+      credits: 3,
+      maxTotal: 100,
+      components: [
+        { key: "mid", label: "Mid Term Examination", max: 15 },
+        { key: "classTest", label: "Class Test", max: 10 },
+        { key: "cert", label: "Certifications/Workshops/Webinars", max: 7 },
+        { key: "cae", label: "Continuous Activity Evaluation", max: 5 },
+        { key: "labExam", label: "Lab Exam", max: 10 },
+        { key: "hackathon", label: "Hackathon", max: 8 },
+        { key: "project", label: "Project", max: 15 },
+        { key: "remid", label: "Re Mid (optional)", max: 15, type: "remid", replaces: "mid" },
+        { key: "end", label: "End Term Examination", max: 30 },
+      ],
+    },
+  ],
+  first: [
+    {
+      id: "dm1",
+      name: "DISCRETE MATHEMATICS",
+      code: "25CAI310PC101",
+      credits: 3,
+      maxTotal: 100,
+      components: [
+        { key: "mid", label: "Mid Term Examination", max: 25 },
+        { key: "cert", label: "Certification", max: 10 },
+        { key: "recitation", label: "Recitation", max: 10 },
+        { key: "classTest", label: "Class Test", max: 15 },
+        { key: "remid", label: "Re Mid (optional)", max: 25, type: "remid", replaces: "mid" },
+        { key: "end", label: "End Term Examination", max: 40 },
+      ],
+    },
+    {
+      id: "life1",
+      name: "LIFE SKILLS: ENTREPRENEURSHIP, LANGUAGE, COMMUNICATION AND PERSONALITY",
+      code: "25HUM204HS101",
+      credits: 3,
+      maxTotal: 100,
+      components: [
+        { key: "mid", label: "Mid Term Examination", max: 30 },
+        { key: "presentation", label: "Presentation", max: 10 },
+        { key: "assignment", label: "Assignment", max: 10 },
+        { key: "project", label: "Project Internal", max: 10 },
+        { key: "remid", label: "Re Mid (optional)", max: 30, type: "remid", replaces: "mid" },
+        { key: "end", label: "End Term Examination", max: 40 },
+      ],
+    },
+    {
+      id: "calc1",
+      name: "CALCULUS AND DIFFERENTIAL EQUATIONS",
+      code: "25MAT310BS107",
+      credits: 3,
+      maxTotal: 100,
+      components: [
+        { key: "mid", label: "Mid Term Examination", max: 25 },
+        { key: "classTest", label: "Class Test", max: 15 },
+        { key: "cert", label: "Certification", max: 5 },
+        { key: "presentation", label: "Presentation", max: 5 },
+        { key: "recitation", label: "Recitation", max: 10 },
+        { key: "remid", label: "Re Mid (optional)", max: 25, type: "remid", replaces: "mid" },
+        { key: "end", label: "End Term Examination", max: 40 },
+      ],
+    },
+    {
+      id: "ccbio1",
+      name: "COMPUTATIONAL CHEMISTRY AND BIOLOGY",
+      code: "25SCI202BS106",
+      credits: 3,
+      maxTotal: 100,
+      components: [
+        { key: "mid", label: "Mid Term Examination", max: 30 },
+        { key: "classTest", label: "Class Test", max: 10 },
+        { key: "labExam", label: "Lab Exam", max: 10 },
+        { key: "labTest", label: "Lab Test", max: 10 },
+        { key: "remid", label: "Re Mid (optional)", max: 30, type: "remid", replaces: "mid" },
+        { key: "end", label: "End Term Examination", max: 40 },
+      ],
+    },
+    {
+      id: "apcs1",
+      name: "Applied Physics for Computer Science and Engineering",
+      code: "25SCI312BS101",
+      credits: 3,
+      maxTotal: 100,
+      components: [
+        { key: "mid", label: "Mid Term Examination", max: 20 },
+        { key: "classTest", label: "Class Test", max: 10 },
+        { key: "labTest", label: "Lab Test", max: 5 },
+        { key: "recitation", label: "Recitation", max: 10 },
+        { key: "labExam", label: "Lab Exam", max: 15 },
+        { key: "remid", label: "Re Mid (optional)", max: 20, type: "remid", replaces: "mid" },
+        { key: "end", label: "End Term Examination", max: 40 },
+      ],
+    },
+  ],
+};
 
 const gradeFromPercent = (percent) => {
   if (percent >= 85) return { grade: "A", points: 10 };
@@ -122,9 +204,12 @@ const gradeFromPercent = (percent) => {
   return { grade: "F", points: 0 };
 };
 
-const totalCredits = COURSES.reduce((sum, c) => sum + c.credits, 0);
-
 export default function App() {
+  const [yearKey, setYearKey] = useState("third");
+
+  const COURSES = useMemo(() => COURSES_BY_YEAR[yearKey] || [], [yearKey]);
+  const totalCredits = useMemo(() => COURSES.reduce((sum, c) => sum + c.credits, 0), [COURSES]);
+
   const initialMarks = useMemo(() => {
     const base = {};
     for (const c of COURSES) {
@@ -132,11 +217,18 @@ export default function App() {
       for (const comp of c.components) base[c.id][comp.key] = "";
     }
     return base;
-  }, []);
+  }, [COURSES]);
 
   const [marks, setMarks] = useState(initialMarks);
   const [results, setResults] = useState({});
   const [cgpa, setCgpa] = useState(null);
+
+  // Reset data when year changes
+  useEffect(() => {
+    setMarks(initialMarks);
+    setResults({});
+    setCgpa(null);
+  }, [initialMarks]);
 
   const handleInputChange = (courseId, key, value, max) => {
     let v = value.replace(/\D/g, "");
@@ -234,7 +326,13 @@ export default function App() {
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-white via-sky-50 to-white text-slate-800">
-      <Header totalCredits={totalCredits} coursesCount={COURSES.length} computedCount={computedCount} />
+      <Header
+        totalCredits={totalCredits}
+        coursesCount={COURSES.length}
+        computedCount={computedCount}
+        selectedYear={yearKey}
+        onChangeYear={(key) => setYearKey(key)}
+      />
 
       <main className="mx-auto max-w-7xl px-3 pb-[96px] pt-4 sm:px-4">
         <motion.div
@@ -244,7 +342,7 @@ export default function App() {
           className="rounded-xl border border-slate-200 bg-white/90 p-4 shadow-sm backdrop-blur"
         >
           <p className="text-sm text-slate-600">
-            Enter marks for each component. Re Mid automatically replaces the original component if it’s higher. Tap “Calculate Subject” on each card, then “Calculate CGPA”.
+            Select year at the top. Enter marks for each component. Re Mid automatically replaces the original component if it’s higher. Tap “Calculate Subject”, then “Calculate CGPA”.
           </p>
           <div className="mt-3 grid grid-cols-2 gap-2 text-xs sm:mt-4 sm:flex sm:gap-2">
             <span className="rounded-lg bg-slate-50 px-3 py-1.5 font-medium text-slate-600">
@@ -268,7 +366,10 @@ export default function App() {
                 onChange={(key, value, max) => handleInputChange(course.id, key, value, max)}
                 onCalculate={() => calculateCourse(course)}
                 onClear={() => {
-                  setMarks((prev) => ({ ...prev, [course.id]: Object.fromEntries(course.components.map((c) => [c.key, ""])) }));
+                  setMarks((prev) => ({
+                    ...prev,
+                    [course.id]: Object.fromEntries(course.components.map((c) => [c.key, ""])) ,
+                  }));
                   setResults((prev) => ({ ...prev, [course.id]: undefined }));
                 }}
               />
