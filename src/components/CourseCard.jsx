@@ -1,4 +1,6 @@
+import { useState, useMemo } from "react";
 import { motion } from "framer-motion";
+import { ChevronDown } from "lucide-react";
 
 const fadeIn = (i) => ({
   hidden: { opacity: 0, y: 14 },
@@ -23,7 +25,10 @@ const gradeColor = (g) => {
 };
 
 export default function CourseCard({ index = 0, course, values = {}, result, onChange, onCalculate, onClear }) {
+  const [open, setOpen] = useState(true);
   const percent = result?.percent ?? null;
+
+  const progress = useMemo(() => Math.min(Math.max(percent ?? 0, 0), 100), [percent]);
 
   return (
     <motion.div
@@ -36,19 +41,34 @@ export default function CourseCard({ index = 0, course, values = {}, result, onC
     >
       <div className="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-sky-500/60 via-sky-400/60 to-sky-500/60" />
 
-      <div className="p-4">
-        <div className="mb-3 flex items-center justify-between">
-          <div>
-            <h3 className="text-base font-semibold text-slate-900">{course.name}</h3>
-            <p className="text-xs text-slate-500">{course.code} • {course.credits} credits</p>
-          </div>
-          <span className="rounded-full bg-slate-50 px-2 py-0.5 text-xs font-medium text-slate-700">/ {course.maxTotal}</span>
+      <button
+        onClick={() => setOpen((v) => !v)}
+        className="flex w-full items-center justify-between gap-3 px-4 py-3 text-left"
+      >
+        <div>
+          <h3 className="text-sm font-semibold text-slate-900 sm:text-base">{course.name}</h3>
+          <p className="text-xs text-slate-500">{course.code} • {course.credits} credits</p>
         </div>
+        <div className="flex items-center gap-2">
+          {result ? (
+            <span className={`hidden rounded-md border px-2 py-0.5 text-xs font-medium sm:inline ${gradeColor(result.grade)}`}>
+              {result.grade}
+            </span>
+          ) : null}
+          <ChevronDown className={`h-5 w-5 text-slate-500 transition-transform ${open ? "rotate-180" : "rotate-0"}`} />
+        </div>
+      </button>
 
-        <div className="grid grid-cols-2 gap-3">
+      <motion.div
+        initial={false}
+        animate={{ height: open ? "auto" : 0, opacity: open ? 1 : 0 }}
+        transition={{ duration: 0.25 }}
+        className="overflow-hidden px-4 pb-4"
+      >
+        <div className="grid grid-cols-2 gap-2 sm:gap-3">
           {course.components.map((comp) => (
             <div key={comp.key} className="flex flex-col gap-1.5">
-              <label className="text-xs font-medium text-slate-600">
+              <label className="text-[11px] font-medium text-slate-600 sm:text-xs">
                 {comp.label} <span className="text-slate-400">(max {comp.max})</span>
               </label>
               <input
@@ -72,12 +92,12 @@ export default function CourseCard({ index = 0, course, values = {}, result, onC
           <div className="h-2 w-full overflow-hidden rounded-full bg-slate-100">
             <div
               className="h-full rounded-full bg-gradient-to-r from-sky-500 to-emerald-500 transition-all"
-              style={{ width: `${Math.min(Math.max(percent ?? 0, 0), 100)}%` }}
+              style={{ width: `${progress}%` }}
             />
           </div>
         </div>
 
-        <div className="mt-4 flex items-center justify-between gap-3">
+        <div className="mt-4 flex flex-col-reverse gap-2 sm:flex-row sm:items-center sm:justify-between">
           <div className="text-sm text-slate-600">
             {result ? (
               <div className="flex flex-wrap items-center gap-2">
@@ -90,22 +110,22 @@ export default function CourseCard({ index = 0, course, values = {}, result, onC
               <span className="text-slate-400">Fill marks and calculate</span>
             )}
           </div>
-          <div className="flex gap-2">
+          <div className="grid grid-cols-2 gap-2 sm:flex sm:gap-2">
             <button
               onClick={onClear}
-              className="rounded-lg border border-slate-200 px-3 py-1.5 text-sm text-slate-700 transition hover:bg-slate-50 active:scale-[0.98]"
+              className="rounded-lg border border-slate-200 px-3 py-2 text-sm text-slate-700 transition hover:bg-slate-50 active:scale-[0.98]"
             >
               Clear
             </button>
             <button
               onClick={onCalculate}
-              className="rounded-lg bg-sky-600 px-3 py-1.5 text-sm font-semibold text-white transition hover:bg-sky-700 active:scale-[0.98]"
+              className="col-span-2 rounded-lg bg-sky-600 px-3 py-2 text-center text-sm font-semibold text-white transition hover:bg-sky-700 active:scale-[0.98] sm:col-span-1"
             >
               Calculate Subject
             </button>
           </div>
         </div>
-      </div>
+      </motion.div>
     </motion.div>
   );
 }

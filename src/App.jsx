@@ -236,23 +236,27 @@ export default function App() {
     <div className="min-h-screen bg-gradient-to-b from-white via-sky-50 to-white text-slate-800">
       <Header totalCredits={totalCredits} coursesCount={COURSES.length} computedCount={computedCount} />
 
-      <main className="mx-auto max-w-7xl px-4 pb-44 pt-6">
+      <main className="mx-auto max-w-7xl px-3 pb-[96px] pt-4 sm:px-4">
         <motion.div
           initial={{ opacity: 0, y: -6 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.4 }}
-          className="rounded-xl border border-slate-200 bg-white/80 p-4 shadow-sm backdrop-blur md:flex md:items-center md:justify-between"
+          transition={{ duration: 0.35 }}
+          className="rounded-xl border border-slate-200 bg-white/90 p-4 shadow-sm backdrop-blur"
         >
           <p className="text-sm text-slate-600">
-            Enter marks for each component. Re Mid will automatically replace the original component if it’s higher. Click "Calculate Subject" to view per-course grade, then "Calculate CGPA".
+            Enter marks for each component. Re Mid automatically replaces the original component if it’s higher. Tap “Calculate Subject” on each card, then “Calculate CGPA”.
           </p>
-          <div className="mt-3 flex gap-2 md:mt-0">
-            <span className="rounded-lg bg-slate-50 px-3 py-1.5 text-xs font-medium text-slate-600">Total Credits: <span className="font-semibold text-slate-900">{totalCredits}</span></span>
-            <span className="rounded-lg bg-slate-50 px-3 py-1.5 text-xs font-medium text-slate-600">Subjects: <span className="font-semibold text-slate-900">{COURSES.length}</span></span>
+          <div className="mt-3 grid grid-cols-2 gap-2 text-xs sm:mt-4 sm:flex sm:gap-2">
+            <span className="rounded-lg bg-slate-50 px-3 py-1.5 font-medium text-slate-600">
+              Total Credits: <span className="font-semibold text-slate-900">{totalCredits}</span>
+            </span>
+            <span className="rounded-lg bg-slate-50 px-3 py-1.5 font-medium text-slate-600">
+              Subjects: <span className="font-semibold text-slate-900">{COURSES.length}</span>
+            </span>
           </div>
         </motion.div>
 
-        <div className="mt-6 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="mt-4 grid grid-cols-1 gap-4 sm:mt-6 sm:grid-cols-2 lg:grid-cols-3">
           <AnimatePresence>
             {COURSES.map((course, idx) => (
               <CourseCard
