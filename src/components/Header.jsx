@@ -1,7 +1,7 @@
 import { GraduationCap, Gauge, Moon, Sun } from "lucide-react";
 import { motion } from "framer-motion";
 
-export default function Header({ totalCredits, coursesCount, computedCount, selectedYear, onChangeYear, theme, onToggleTheme }) {
+export default function Header({ totalCredits, coursesCount, computedCount, selectedYear, onChangeYear, theme, onToggleTheme, electiveSummaries = [] }) {
   const isDark = theme === "dark";
   return (
     <header className="sticky top-0 z-30 bg-gradient-to-r from-sky-600 via-sky-500 to-sky-600 text-white shadow print:hidden dark:from-slate-900 dark:via-slate-800 dark:to-slate-900">
@@ -54,6 +54,17 @@ export default function Header({ totalCredits, coursesCount, computedCount, sele
             <span>{computedCount ?? 0}/{coursesCount ?? 0} calculated • {totalCredits ?? 0} credits</span>
           </div>
         </div>
+        {/* Optional summary for selected electives on mobile */}
+        {electiveSummaries && electiveSummaries.length > 0 ? (
+          <div className="grid grid-cols-1 gap-2 pb-3 sm:hidden">
+            {electiveSummaries.map((e) => (
+              <div key={e.id} className="rounded-md bg-white/15 px-3 py-2">
+                <div className="text-sm font-medium leading-5">{e.name}</div>
+                <div className="text-[11px] text-white/85">{e.code} • {e.credits} credits</div>
+              </div>
+            ))}
+          </div>
+        ) : null}
       </div>
     </header>
   );

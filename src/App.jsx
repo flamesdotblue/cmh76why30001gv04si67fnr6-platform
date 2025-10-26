@@ -296,6 +296,21 @@ export default function App() {
 
   const totalCredits = useMemo(() => ACTIVE_COURSES.reduce((s, c) => s + (c.credits || 0), 0), [ACTIVE_COURSES]);
 
+  // For header mobile summary of selected electives
+  const electiveSummaries = useMemo(() => {
+    if (yearKey !== "third") return [];
+    const base = COURSES_BY_YEAR.third;
+    const summary = [];
+    for (const item of base) {
+      if (item.type === "elective") {
+        const idx = electiveSelections[item.id] ?? 0;
+        const opt = item.options[idx] || item.options[0];
+        summary.push({ name: opt.name, code: opt.code, credits: opt.credits, id: opt.id, label: item.label });
+      }
+    }
+    return summary;
+  }, [yearKey, electiveSelections]);
+
   // Initialize marks for active courses
   const initialMarks = useMemo(() => {
     const base = {};
@@ -428,6 +443,7 @@ export default function App() {
         onChangeYear={(key) => setYearKey(key)}
         theme={theme}
         onToggleTheme={() => setTheme((t) => (t === "dark" ? "light" : "dark"))}
+        electiveSummaries={electiveSummaries}
       />
 
       <main className="mx-auto max-w-7xl px-3 pb-[96px] pt-4 sm:px-4">
@@ -448,6 +464,16 @@ export default function App() {
               Subjects: <span className="font-semibold text-slate-900 dark:text-white">{ACTIVE_COURSES.length}</span>
             </span>
           </div>
+          {yearKey === "third" && electiveSummaries.length > 0 ? (
+            <div className="mt-3 grid grid-cols-1 gap-2 sm:grid-cols-2">
+              {electiveSummaries.map((e) => (
+                <div key={e.id} className="rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm dark:border-slate-700 dark:bg-slate-800">
+                  <div className="font-medium text-slate-900 dark:text-white">{e.name}</div>
+                  <div className="text-xs text-slate-500 dark:text-slate-400">{e.code} • {e.credits} credits</div>
+                </div>
+              ))}
+            </div>
+          ) : null}
         </motion.div>
 
         <div className="mt-4 grid grid-cols-1 gap-4 sm:mt-6 sm:grid-cols-2 lg:grid-cols-3">
