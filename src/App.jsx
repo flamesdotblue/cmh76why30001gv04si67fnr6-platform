@@ -262,13 +262,12 @@ export default function App() {
   });
   const [theme, setTheme] = useState("light");
 
-  // Apply dark mode class on mount and when theme changes
+  // Theme: load preference and apply class
   useEffect(() => {
     const stored = localStorage.getItem("theme");
-    if (stored) {
-      setTheme(stored);
-    } else {
-      const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+    if (stored) setTheme(stored);
+    else {
+      const prefersDark = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches;
       setTheme(prefersDark ? "dark" : "light");
     }
   }, []);
@@ -279,7 +278,7 @@ export default function App() {
     localStorage.setItem("theme", theme);
   }, [theme]);
 
-  // Resolve active courses based on year and elective selections
+  // Resolve active courses list
   const ACTIVE_COURSES = useMemo(() => {
     const base = COURSES_BY_YEAR[yearKey] || [];
     const list = [];
@@ -297,7 +296,7 @@ export default function App() {
 
   const totalCredits = useMemo(() => ACTIVE_COURSES.reduce((s, c) => s + (c.credits || 0), 0), [ACTIVE_COURSES]);
 
-  // Initialize marks based on currently active courses
+  // Initialize marks for active courses
   const initialMarks = useMemo(() => {
     const base = {};
     for (const c of ACTIVE_COURSES) {
@@ -311,7 +310,6 @@ export default function App() {
   const [results, setResults] = useState({});
   const [cgpa, setCgpa] = useState(null);
 
-  // Reset all when the active course set changes (year or electives global change)
   useEffect(() => {
     setMarks(initialMarks);
     setResults({});
@@ -398,7 +396,6 @@ export default function App() {
 
   const onChangeElective = (groupId, optionIndex) => {
     setElectiveSelections((prev) => ({ ...prev, [groupId]: optionIndex }));
-    // marks/results reset is handled by initialMarks effect when ACTIVE_COURSES changes
   };
 
   const performance = useMemo(() => {
@@ -509,7 +506,7 @@ export default function App() {
 
       <ResultPanel cgpa={cgpa} performance={performance} />
 
-      <FooterActions onCalculate={calculateAllCGPA} onReset={resetAll} onExport={exportPDF} />
+      <FooterActions onCalculate={calculateAllCGPA} onReset={resetAll} onExport={exportPDF} statusLabel={`${computedCount}/${ACTIVE_COURSES.length} calculated • ${totalCredits} credits`} />
     </div>
   );
 }
