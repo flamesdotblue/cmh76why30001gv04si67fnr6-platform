@@ -1,0 +1,32 @@
+import { motion, AnimatePresence } from "framer-motion";
+
+export default function ResultPanel({ cgpa, performance }) {
+  return (
+    <AnimatePresence>
+      <motion.div
+        initial={{ y: 80, opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
+        exit={{ y: 80, opacity: 0 }}
+        transition={{ type: "spring", stiffness: 220, damping: 22 }}
+        className="fixed inset-x-0 bottom-16 z-20"
+      >
+        <div className="mx-auto w-full max-w-xl rounded-2xl border border-slate-200 bg-white/90 px-5 py-4 shadow-lg backdrop-blur">
+          {cgpa == null ? (
+            <div className="text-center text-sm text-slate-600">Your CGPA will appear here after calculation.</div>
+          ) : (
+            <div className="flex items-center justify-between">
+              <div>
+                <div className="text-xs uppercase tracking-wide text-slate-500">Final Result</div>
+                <div className="text-sm text-slate-600">Performance: <span className={`font-medium ${performance.color}`}>{performance.label}</span></div>
+              </div>
+              <div className="text-right">
+                <div className="text-xs text-slate-500">Your CGPA</div>
+                <div className="text-3xl font-bold text-slate-900">{cgpa.toFixed(2)}</div>
+              </div>
+            </div>
+          )}
+        </div>
+      </motion.div>
+    </AnimatePresence>
+  );
+}
