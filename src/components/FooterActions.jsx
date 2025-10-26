@@ -1,17 +1,17 @@
-export default function FooterActions({ onCalculate, onReset }) {
+export default function FooterActions({ onCalculate, onReset, onExport }) {
   return (
     <div
-      className="fixed inset-x-0 bottom-0 z-30 border-t border-slate-200 bg-white/90 backdrop-blur supports-[backdrop-filter]:bg-white/70"
+      className="fixed inset-x-0 bottom-0 z-30 border-t border-slate-200 bg-white/90 backdrop-blur supports-[backdrop-filter]:bg-white/70 dark:border-slate-800 dark:bg-slate-900/90 print:hidden"
       style={{ paddingBottom: "max(env(safe-area-inset-bottom), 0px)" }}
     >
       <div className="mx-auto flex max-w-7xl flex-col gap-2 px-3 py-2 sm:flex-row sm:items-center sm:justify-between sm:px-4 sm:py-3">
-        <div className="text-[11px] leading-4 text-slate-500 sm:text-xs">
+        <div className="text-[11px] leading-4 text-slate-500 dark:text-slate-400 sm:text-xs">
           Inputs are validated and clamped to their maximums. Re Mid replaces the original component if higher.
         </div>
-        <div className="grid grid-cols-2 gap-2 sm:flex">
+        <div className="grid grid-cols-3 gap-2 sm:flex">
           <button
             onClick={onReset}
-            className="rounded-lg border border-slate-200 px-4 py-2 text-sm font-medium text-slate-700 transition hover:bg-slate-50 active:scale-[0.98]"
+            className="rounded-lg border border-slate-200 px-4 py-2 text-sm font-medium text-slate-700 transition hover:bg-slate-50 active:scale-[0.98] dark:border-slate-700 dark:text-slate-200 dark:hover:bg-slate-800"
           >
             Reset All
           </button>
@@ -20,6 +20,12 @@ export default function FooterActions({ onCalculate, onReset }) {
             className="rounded-lg bg-emerald-600 px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-emerald-700 active:scale-[0.98]"
           >
             Calculate CGPA
+          </button>
+          <button
+            onClick={onExport}
+            className="rounded-lg bg-slate-700 px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-slate-800 active:scale-[0.98] dark:bg-slate-800 dark:hover:bg-slate-700"
+          >
+            Export PDF
           </button>
         </div>
       </div>
