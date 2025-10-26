@@ -82,18 +82,16 @@ const COURSES = [
     ],
   },
   {
-    id: "uav",
-    name: "Unmanned Aerial Vehicles (UAV)",
-    code: "-",
+    id: "sei",
+    name: "Sustainability and Ethical Innovation",
+    code: "23CE200HS310",
     credits: 3,
     maxTotal: 100,
     components: [
-      { key: "mid", label: "Mid", max: 15 },
-      { key: "classTest", label: "Class Test", max: 10 },
-      { key: "labTest", label: "Lab Test", max: 10 },
-      { key: "project", label: "Project", max: 20 },
-      { key: "remid", label: "Re Mid (optional)", max: 15, type: "remid", replaces: "mid" },
-      { key: "end", label: "End Term", max: 35 },
+      { key: "mid", label: "Mid Term Examination", max: 30 },
+      { key: "classTest", label: "Class Test", max: 20 },
+      { key: "remid", label: "Re Mid (optional)", max: 30, type: "remid", replaces: "mid" },
+      { key: "end", label: "End Term Examination", max: 50 },
     ],
   },
   {
@@ -154,7 +152,6 @@ export default function App() {
     const vals = marks[course.id] || {};
     let total = 0;
 
-    // Prepare a map so remid replaces its target if higher
     const valueOf = (key) => {
       const raw = parseInt(vals[key], 10);
       return Number.isFinite(raw) ? raw : 0;
@@ -163,7 +160,6 @@ export default function App() {
     const remidEntries = course.components.filter((c) => c.type === "remid");
     const replaced = new Set(remidEntries.map((r) => r.replaces));
 
-    // Sum normal components excluding those that may be replaced by remid
     for (const comp of course.components) {
       if (comp.type === "remid") continue;
       const raw = valueOf(comp.key);
@@ -176,7 +172,6 @@ export default function App() {
       }
     }
 
-    // Clamp to course maxTotal to avoid accidental overflow
     total = Math.min(total, course.maxTotal);
     const percent = (total / course.maxTotal) * 100;
     const { grade, points } = gradeFromPercent(percent);
@@ -193,7 +188,6 @@ export default function App() {
   };
 
   const calculateAllCGPA = () => {
-    // Use available results; if course not calculated, try to calculate on the fly
     let sumWeighted = 0;
     let sumCredits = 0;
 
@@ -227,7 +221,6 @@ export default function App() {
     return { label: "Needs Improvement", color: "text-rose-600" };
   }, [cgpa]);
 
-  // Auto-clear CGPA if inputs change
   useEffect(() => {
     setCgpa(null);
   }, [marks]);
