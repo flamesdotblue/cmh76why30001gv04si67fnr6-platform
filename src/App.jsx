@@ -122,6 +122,8 @@ const gradeFromPercent = (percent) => {
   return { grade: "F", points: 0 };
 };
 
+const totalCredits = COURSES.reduce((sum, c) => sum + c.credits, 0);
+
 export default function App() {
   const initialMarks = useMemo(() => {
     const base = {};
@@ -133,11 +135,11 @@ export default function App() {
   }, []);
 
   const [marks, setMarks] = useState(initialMarks);
-  const [results, setResults] = useState({}); // per-course results
+  const [results, setResults] = useState({});
   const [cgpa, setCgpa] = useState(null);
 
   const handleInputChange = (courseId, key, value, max) => {
-    let v = value.replace(/\D/g, ""); // digits only
+    let v = value.replace(/\D/g, "");
     if (v === "") {
       setMarks((prev) => ({ ...prev, [courseId]: { ...prev[courseId], [key]: "" } }));
       return;
@@ -221,24 +223,36 @@ export default function App() {
     return { label: "Needs Improvement", color: "text-rose-600" };
   }, [cgpa]);
 
+  const computedCount = useMemo(
+    () => Object.values(results).filter((r) => r && typeof r.points === "number").length,
+    [results]
+  );
+
   useEffect(() => {
     setCgpa(null);
   }, [marks]);
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-sky-50 to-white text-slate-800">
-      <Header />
-      <main className="mx-auto max-w-7xl px-4 pb-40">
-        <motion.p
+    <div className="min-h-screen bg-gradient-to-b from-white via-sky-50 to-white text-slate-800">
+      <Header totalCredits={totalCredits} coursesCount={COURSES.length} computedCount={computedCount} />
+
+      <main className="mx-auto max-w-7xl px-4 pb-44 pt-6">
+        <motion.div
           initial={{ opacity: 0, y: -6 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.4 }}
-          className="mt-2 text-sm text-slate-600"
+          className="rounded-xl border border-slate-200 bg-white/80 p-4 shadow-sm backdrop-blur md:flex md:items-center md:justify-between"
         >
-          Enter marks for each component. Re Mid will replace Mid if higher. Click Calculate Subject to get grade per course, then Calculate CGPA.
-        </motion.p>
+          <p className="text-sm text-slate-600">
+            Enter marks for each component. Re Mid will automatically replace the original component if it’s higher. Click "Calculate Subject" to view per-course grade, then "Calculate CGPA".
+          </p>
+          <div className="mt-3 flex gap-2 md:mt-0">
+            <span className="rounded-lg bg-slate-50 px-3 py-1.5 text-xs font-medium text-slate-600">Total Credits: <span className="font-semibold text-slate-900">{totalCredits}</span></span>
+            <span className="rounded-lg bg-slate-50 px-3 py-1.5 text-xs font-medium text-slate-600">Subjects: <span className="font-semibold text-slate-900">{COURSES.length}</span></span>
+          </div>
+        </motion.div>
 
-        <div className="mt-6 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="mt-6 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
           <AnimatePresence>
             {COURSES.map((course, idx) => (
               <CourseCard
